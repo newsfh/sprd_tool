@@ -33,6 +33,12 @@ auto_backup.sh
 cpimg.sh
 buildtag.sh
 git-meld.sh
+cpfile.sh
+didiwiki
+idh.sh
+opengrok.sh
+parse_log
+/buildscript
 
 *.depend*
 
