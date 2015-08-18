@@ -17,6 +17,8 @@
 *.bin
 *.cfgtmp
 *.dts.tmp
+*.bk
+*.old
 
 # Build tree
 /build-*
@@ -38,7 +40,11 @@ didiwiki
 idh.sh
 opengrok.sh
 parse_log
+repo.bk
+repo.old
+cntser.sh
 /buildscript
+/reposource
 
 *.depend*
 

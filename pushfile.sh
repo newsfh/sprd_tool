@@ -14,5 +14,6 @@ fi
 
 echo "Project: $project"
 echo "Branch: $branch"
+echo "========================================"
 
 git push ssh://hua.fang@10.0.0.160:29418/$project HEAD:refs/for/$branch
