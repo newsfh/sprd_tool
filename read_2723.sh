@@ -1,9 +1,45 @@
-READ_PD=1
-READ_LP=1
-READ_SLP_PD=1
-READ_LP_SW=1
-READ_XTL=1
-READ_VOL=1
+FUNC_ENABLE=0xffffffff
+
+READ_PD=0x1
+READ_LP=0x2
+READ_SLP_PD=0x4
+READ_LP_SW=0x8
+READ_XTL=0x10
+READ_VOL=0x20
+
+filename=$(basename $0)
+
+function help() {
+	echo "$filename [-h|-a|-p|-l|-s|-w|-x|v]"
+	echo "  -h: help"
+	echo "  -a: all"
+	echo "  -p: print power down"
+	echo "  -l: print lower power"
+	echo "  -s: print sleep power down"
+	echo "  -w: print lower power SW"
+	echo "  -x: print xtl"
+	echo "  -v: print voltage"
+}
+
+if (($#>0)); then
+	FUNC_ENABLE=0
+
+	while [ -n "$1" ]; do
+		case $1 in
+			-h) help ;;
+			-a) FUNC_ENABLE=0xffffffff ;;
+			-p) FUNC_ENABLE=$(($FUNC_ENABLE|$READ_PD)) ;;
+			-l) FUNC_ENABLE=$(($FUNC_ENABLE|$READ_LP)) ;;
+			-s) FUNC_ENABLE=$(($FUNC_ENABLE|$READ_SLP_PD)) ;;
+			-w) FUNC_ENABLE=$(($FUNC_ENABLE|$READ_LP_SW)) ;;
+			-x) FUNC_ENABLE=$(($FUNC_ENABLE|$READ_XTL)) ;;
+			-v) FUNC_ENABLE=$(($FUNC_ENABLE|$READ_VOL)) ;;
+			*) ;;
+		esac
+
+		shift 1
+	done
+fi
 
 function hex() {
 	printf "0x%08x" $1
@@ -48,7 +84,7 @@ function print_bit() {
 	esac
 }
 
-if (( READ_PD == 1)); then
+if (( $READ_PD & $FUNC_ENABLE)); then
 ##### ANA_REG_GLB_LDO_DCDC_PD
 val=$(read_reg 0x40038800 0x10)
 echo "=== ANA_REG_GLB_LDO_DCDC_PD(0x40038810 : $val) ==="
@@ -94,7 +130,7 @@ print_bit $val 0 "LDO_SDIO_PD"
 echo " "
 fi
 
-if (( READ_SLP_PD == 1 )); then
+if (( READ_SLP_PD  & $FUNC_ENABLE )); then
 ##### ANA_REG_GLB_PWR_SLP_CTRL0
 val=$(read_reg 0x40038800 0x90)
 echo "=== ANA_REG_GLB_PWR_SLP_CTRL0(0x40038890 : $val) ==="
@@ -140,7 +176,7 @@ print_bit $val 0 "SLP_LDOSDIO_PD_EN"
 echo " "
 fi
 
-if (( READ_LP == 1)); then
+if (( READ_LP  & $FUNC_ENABLE )); then
 ##### ANA_REG_GLB_PWR_SLP_CTRL2
 val=$(read_reg 0x40038800 0x98)
 echo "=== ANA_REG_GLB_PWR_SLP_CTRL2(0x40038898 : $val) ==="
@@ -186,7 +222,7 @@ print_bit $val 0 "SLP_LDOSDIO_LP_EN"
 echo " "
 fi
 
-if (( READ_LP_SW == 1 )); then
+if (( READ_LP_SW  & $FUNC_ENABLE )); then
 ##### ANA_REG_GLB_PWR_SLP_CTRL4
 val=$(read_reg 0x40038800 0xa0)
 echo "=== ANA_REG_GLB_PWR_SLP_CTRL4(0x400388a0 : $val) ==="
@@ -210,7 +246,7 @@ print_bit $val 0 "LDOVDD18_LP_EN_SW"
 echo " "
 fi
 
-if (( READ_XTL == 1)); then
+if (( READ_XTL  & $FUNC_ENABLE )); then
 ##### ANA_REG_GLB_PWR_XTL_EN0
 val=$(read_reg 0x40038800 0xc4)
 echo "=== ANA_REG_GLB_PWR_XTL_EN0(0x400388c4 : $val) ==="
@@ -356,7 +392,7 @@ function print_dcdc_1() {
 	echo $real_vol "mV"
 }
 
-if (( READ_VOL == 1)); then
+if (( READ_VOL  & $FUNC_ENABLE )); then
 ### DCDC_CORE_ADI 
 val=$(read_reg 0x40038800 0x200)
 case `ldo_hex $val 5 0x1f` in

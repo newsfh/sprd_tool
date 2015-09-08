@@ -1,6 +1,44 @@
-READ_PIN=1
-READ_MODULE_EB=1
-READ_SLEEP_STATUS=1
+FUNC_ENABLE=0xffffffff
+
+READ_PIN=0x1
+READ_MODULE_EB=0x2
+READ_SLEEP_STATUS=0x4
+READ_DDR_FREQ=0x8
+READ_XTL_INFO=0x10
+READ_PLL_SEL=0X20
+
+filename=$(basename $0)
+
+function help() {
+	echo "$filename [-h|-a|-p|-m|-s|-d|-x|-l]"
+	echo "  -h: help"
+	echo "  -a: all"
+	echo "  -p: print pinmap"
+	echo "  -m: print module eb"
+	echo "  -s: print sleep status"
+	echo "  -d: print ddr info"
+	echo "  -x: print xtl cfg"
+	echo "  -l: print pll cfg"
+}
+
+if (($#>0)); then
+	FUNC_ENABLE=0
+
+	while [ -n "$1" ]; do
+		case $1 in
+			-h) help ;;
+			-a) FUNC_ENABLE=0xffffffff ;;
+			-p) FUNC_ENABLE=$(($FUNC_ENABLE|$READ_PIN)) ;;
+			-m) FUNC_ENABLE=$(($FUNC_ENABLE|$READ_MODULE_EB)) ;;
+			-s) FUNC_ENABLE=$(($FUNC_ENABLE|$READ_SLEEP_STATUS)) ;;
+			-d) FUNC_ENABLE=$(($FUNC_ENABLE|$READ_DDR_FREQ)) ;;
+			-x) FUNC_ENABLE=$(($FUNC_ENABLE|$READ_XTL_INFO)) ;;
+			-l) FUNC_ENABLE=$(($FUNC_ENABLE|$READ_PLL_SEL)) ;;
+			*) ;;
+		esac
+		shift 1
+	done
+fi
 
 function hex() {
 	printf "0x%08x" $1
@@ -45,7 +83,7 @@ function print_bit() {
 	esac
 }
 
-if ((READ_PIN == 1)); then
+if (($READ_PIN & $FUNC_ENABLE)); then
 echo "===============================  pinmap config  ================================="
 function get_pin_name() {
 	pin_add=$1
@@ -450,7 +488,7 @@ echo " "
 fi
 
 
-if ((READ_MODULE_EB == 1)); then
+if (($READ_MODULE_EB & $FUNC_ENABLE)); then
 echo "===============================  module eb list ================================="
 ##### AHB_EB
 val=$(read_reg 0x20e00000 0x00)
@@ -587,7 +625,7 @@ echo "==========================================================================
 echo " "
 fi
 
-if (( READ_SLEEP_STATUS == 1 )); then
+if (( $READ_SLEEP_STATUS & $FUNC_ENABLE )); then
 echo "===============================  sleep status  ================================="
 ##### CP_SLP_STATUS_DBG0
 val=$(read_reg 0x402b0000 0xb4)
@@ -615,4 +653,187 @@ echo " "
 echo "=================================================================================="
 echo " "
 fi
+
+if (($READ_DDR_FREQ & $FUNC_ENABLE)); then
+echo "===============================  DDR freq  ================================="
+
+function read_DDR_freq() {
+	REG_AON_CLK_EMC_CFG=$(adb shell lookat 0x402d0058|tr -d '\r')
+	REG_AON_APB_DPLL_CFG1=$(adb shell lookat 0x402e004c|tr -d '\r')
+	REG_AON_APB_DPLL_CFG2=$(adb shell lookat 0x402e0050|tr -d '\r')
+
+	clk_emc_sel=$(($REG_AON_CLK_EMC_CFG & 7))
+	clk_emc_div=$(($REG_AON_CLK_EMC_CFG >> 8 & 0x7))
+	dpll_refin=$((($REG_AON_APB_DPLL_CFG1 >> 18) & 0x3))
+	dpll_nint=$((($REG_AON_APB_DPLL_CFG2 >> 24) & 0x3f))
+	dpll_kint=$(($REG_AON_APB_DPLL_CFG2 & 0xfffff))
+
+	ddr_freq=0
+	ddr_pll="TWPLL"
+
+	if ((clk_emc_sel<7)); then
+		case $clk_emc_sel in
+			0) clk_src=26 ;;
+			1) clk_src=192 ;;
+			2) clk_src=307 ;;
+			3) clk_src=384 ;;
+			4) clk_src=512 ;;
+			5) clk_src=614 ;;
+			6) clk_src=768 ;;
+			*) clk_src=0 ;;
+		esac
+	else
+		case $dpll_refin in
+			0) refin=2 ;;
+			1) refin=4 ;;
+			2) refin=13 ;;
+			3) refin=26 ;;
+			*) refin=0 ;;
+		esac
+
+		clk_src=$(($refin*$dpll_nint+$refin*$dpll_kint/1024/1024))
+		ddr_pll="DPLL"
+	fi
+
+	ddr_freq=$(($clk_src/(1+$clk_emc_div)/2))
+
+	echo "REG_AON_CLK_EMC_CFG: $REG_AON_CLK_EMC_CFG"
+	echo "REG_AON_APB_DPLL_CFG1: $REG_AON_APB_DPLL_CFG1"
+	echo "REG_AON_APB_DPLL_CFG2: $REG_AON_APB_DPLL_CFG2"
+	echo "----"
+	echo "freq: $ddr_freq"
+	echo "PLL: $ddr_pll"
+}
+
+read_DDR_freq
+
+echo "=================================================================================="
+echo " "
+fi
+
+if (($READ_XTL_INFO & $FUNC_ENABLE)); then
+echo "===============================  xtl cfg  ================================="
+##### XTL0_REL_CFG
+val=$(read_reg 0x402b0000 0x80)
+echo "=== XTL0_REL_CFG(0x402b0080 : $val) ==="
+
+print_bit $val 5 "XTL0_ARM7_SEL"
+print_bit $val 4 "XTL0_VCP1_SEL"
+print_bit $val 3 "XTL0_VCP0_SEL"
+print_bit $val 2 "XTL0_CP1_SEL"
+print_bit $val 1 "XTL0_CP0_SEL"
+print_bit $val 0 "XTL0_AP_SEL"
+echo " "
+
+##### XTL1_REL_CFG
+val=$(read_reg 0x402b0000 0x84)
+echo "=== XTL1_REL_CFG(0x402b0084 : $val) ==="
+
+print_bit $val 5 "XTL1_ARM7_SEL"
+print_bit $val 4 "XTL1_VCP1_SEL"
+print_bit $val 3 "XTL1_VCP0_SEL"
+print_bit $val 2 "XTL1_CP1_SEL"
+print_bit $val 1 "XTL1_CP0_SEL"
+print_bit $val 0 "XTL1_AP_SEL"
+echo " "
+
+##### XTLBUF0_REL_CFG
+val=$(read_reg 0x402b0000 0x8c)
+echo "=== XTLBUF0_REL_CFG(0x402b008c : $val) ==="
+
+print_bit $val 5 "XTLBUF0_ARM7_SEL"
+print_bit $val 4 "XTLBUF0_VCP1_SEL"
+print_bit $val 3 "XTLBUF0_VCP0_SEL"
+print_bit $val 2 "XTLBUF0_CP1_SEL"
+print_bit $val 1 "XTLBUF0_CP0_SEL"
+print_bit $val 0 "XTLBUF0_AP_SEL"
+echo " "
+
+##### XTLBUF1_REL_CFG
+val=$(read_reg 0x402b0000 0x90)
+echo "=== XTLBUF1_REL_CFG(0x402b0090 : $val) ==="
+
+print_bit $val 5 "XTLBUF1_ARM7_SEL"
+print_bit $val 4 "XTLBUF1_VCP1_SEL"
+print_bit $val 3 "XTLBUF1_VCP0_SEL"
+print_bit $val 2 "XTLBUF1_CP1_SEL"
+print_bit $val 1 "XTLBUF1_CP0_SEL"
+print_bit $val 0 "XTLBUF1_AP_SEL"
+echo " "
+
+echo "=================================================================================="
+echo " "
+fi
+
+if (($READ_PLL_SEL & $FUNC_ENABLE)); then
+echo "===============================  pll cfg  ================================="
+##### MPLL_REL_CFG
+val=$(read_reg 0x402b0000 0x94)
+echo "=== MPLL_REL_CFG(0x402b0094 : $val) ==="
+
+print_bit $val 8 "MPLL_REF_SEL"
+print_bit $val 5 "MPLL_ARM7_SEL"
+print_bit $val 4 "MPLL_VCP1_SEL"
+print_bit $val 3 "MPLL_VCP0_SEL"
+print_bit $val 2 "MPLL_CP1_SEL"
+print_bit $val 1 "MPLL_CP0_SEL"
+print_bit $val 0 "MPLL_AP_SEL"
+echo " "
+
+##### DPLL_REL_CFG
+val=$(read_reg 0x402b0000 0x98)
+echo "=== DPLL_REL_CFG(0x402b0098 : $val) ==="
+
+print_bit $val 8 "DPLL_REF_SEL"
+print_bit $val 5 "DPLL_ARM7_SEL"
+print_bit $val 4 "DPLL_VCP1_SEL"
+print_bit $val 3 "DPLL_VCP0_SEL"
+print_bit $val 2 "DPLL_CP1_SEL"
+print_bit $val 1 "DPLL_CP0_SEL"
+print_bit $val 0 "DPLL_AP_SEL"
+echo " "
+
+##### LTEPLL_REL_CFG
+val=$(read_reg 0x402b0000 0x9c)
+echo "=== LTEPLL_REL_CFG(0x402b009c : $val) ==="
+
+print_bit $val 8 "LTEPLL_REF_SEL"
+print_bit $val 5 "LTEPLL_ARM7_SEL"
+print_bit $val 4 "LTEPLL_VCP1_SEL"
+print_bit $val 3 "LTEPLL_VCP0_SEL"
+print_bit $val 2 "LTEPLL_CP1_SEL"
+print_bit $val 1 "LTEPLL_CP0_SEL"
+print_bit $val 0 "LTEPLL_AP_SEL"
+echo " "
+
+##### TWPLL_REL_CFG
+val=$(read_reg 0x402b0000 0xa0)
+echo "=== TWPLL_REL_CFG(0x402b00a0 : $val) ==="
+
+print_bit $val 8 "TWPLL_REF_SEL"
+print_bit $val 5 "TWPLL_ARM7_SEL"
+print_bit $val 4 "TWPLL_VCP1_SEL"
+print_bit $val 3 "TWPLL_VCP0_SEL"
+print_bit $val 2 "TWPLL_CP1_SEL"
+print_bit $val 1 "TWPLL_CP0_SEL"
+print_bit $val 0 "TWPLL_AP_SEL"
+echo " "
+
+##### LVDSDIS_PLL_REL_CFG
+val=$(read_reg 0x402b0000 0xa4)
+echo "=== LVDSDIS_PLL_REL_CFG(0x402b00a4 : $val) ==="
+
+print_bit $val 8 "LVDSDIS_PLL_REF_SEL"
+print_bit $val 5 "LVDSDIS_PLL_ARM7_SEL"
+print_bit $val 4 "LVDSDIS_PLL_VCP1_SEL"
+print_bit $val 3 "LVDSDIS_PLL_VCP0_SEL"
+print_bit $val 2 "LVDSDIS_PLL_CP1_SEL"
+print_bit $val 1 "LVDSDIS_PLL_CP0_SEL"
+print_bit $val 0 "LVDSDIS_PLL_AP_SEL"
+echo " "
+
+echo "=================================================================================="
+echo " "
+fi
+
 
