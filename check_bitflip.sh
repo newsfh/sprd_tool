@@ -1,5 +1,6 @@
 #!/bin/sh
 
+filename=$(basename $0)
 message()
 {
 	echo "  $filename <sysdump_file> [armv8]"

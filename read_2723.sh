@@ -1,3 +1,10 @@
+READ_PD=1
+READ_LP=1
+READ_SLP_PD=1
+READ_LP_SW=1
+READ_XTL=1
+READ_VOL=1
+
 function hex() {
 	printf "0x%08x" $1
 }
@@ -41,6 +48,7 @@ function print_bit() {
 	esac
 }
 
+if (( READ_PD == 1)); then
 ##### ANA_REG_GLB_LDO_DCDC_PD
 val=$(read_reg 0x40038800 0x10)
 echo "=== ANA_REG_GLB_LDO_DCDC_PD(0x40038810 : $val) ==="
@@ -84,7 +92,9 @@ print_bit $val 2 "LDO_SIM1_PD"
 print_bit $val 1 "LDO_SIM0_PD"
 print_bit $val 0 "LDO_SDIO_PD"
 echo " "
+fi
 
+if (( READ_SLP_PD == 1 )); then
 ##### ANA_REG_GLB_PWR_SLP_CTRL0
 val=$(read_reg 0x40038800 0x90)
 echo "=== ANA_REG_GLB_PWR_SLP_CTRL0(0x40038890 : $val) ==="
@@ -128,7 +138,9 @@ print_bit $val 2 "SLP_LDOSIM1_PD_EN"
 print_bit $val 1 "SLP_LDOSIM0_PD_EN"
 print_bit $val 0 "SLP_LDOSDIO_PD_EN"
 echo " "
+fi
 
+if (( READ_LP == 1)); then
 ##### ANA_REG_GLB_PWR_SLP_CTRL2
 val=$(read_reg 0x40038800 0x98)
 echo "=== ANA_REG_GLB_PWR_SLP_CTRL2(0x40038898 : $val) ==="
@@ -172,7 +184,9 @@ print_bit $val 2 "SLP_LDOSIM1_LP_EN"
 print_bit $val 1 "SLP_LDOSIM0_LP_EN"
 print_bit $val 0 "SLP_LDOSDIO_LP_EN"
 echo " "
+fi
 
+if (( READ_LP_SW == 1 )); then
 ##### ANA_REG_GLB_PWR_SLP_CTRL4
 val=$(read_reg 0x40038800 0xa0)
 echo "=== ANA_REG_GLB_PWR_SLP_CTRL4(0x400388a0 : $val) ==="
@@ -194,7 +208,9 @@ print_bit $val 2 "LDOWIFIPA_LP_EN_SW"
 print_bit $val 1 "LDOVDD28_LP_EN_SW"
 print_bit $val 0 "LDOVDD18_LP_EN_SW"
 echo " "
+fi
 
+if (( READ_XTL == 1)); then
 ##### ANA_REG_GLB_PWR_XTL_EN0
 val=$(read_reg 0x40038800 0xc4)
 echo "=== ANA_REG_GLB_PWR_XTL_EN0(0x400388c4 : $val) ==="
@@ -282,6 +298,7 @@ print_bit $val 2 "DCDC_CORE_EXT_XTL0_EN"
 print_bit $val 1 "DCDC_CORE_XTL1_EN"
 print_bit $val 0 "DCDC_CORE_XTL0_EN"
 echo " "
+fi
 
 ########################   print ldo
 function hex_1() {
@@ -339,6 +356,7 @@ function print_dcdc_1() {
 	echo $real_vol "mV"
 }
 
+if (( READ_VOL == 1)); then
 ### DCDC_CORE_ADI 
 val=$(read_reg 0x40038800 0x200)
 case `ldo_hex $val 5 0x1f` in
@@ -443,6 +461,7 @@ print_ldo "KPLED" $val 0 0xff 1200 10
 ### VIBR_CTRL0
 val=$(read_reg 0x40038800 0xf8)
 print_ldo "VIBR" $val 0 0xff 1200 10
+fi
 
 
 
