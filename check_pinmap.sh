@@ -456,7 +456,7 @@ function print_error() {
 	echo " $filename <[-r] reg>|<-v value>"
 }
 
-if (($#<2)); then
+if (($#==1)); then
 	check_by_addr $1
 elif (($#==2)); then
 	if [[ "$1" == "-r" ]]; then
