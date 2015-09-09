@@ -1,4 +1,4 @@
-FUNC_ENABLE=0xffffffff
+FUNC_ENABLE=0
 
 READ_PIN=0x1
 READ_MODULE_EB=0x2
@@ -38,6 +38,9 @@ if (($#>0)); then
 		esac
 		shift 1
 	done
+else
+	help
+	exit
 fi
 
 function hex() {
