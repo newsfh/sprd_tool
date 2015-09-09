@@ -41,198 +41,206 @@ function print_bit() {
 	esac
 }
 
+function show_pininfo() {
+cat << EOF
+0x402a0000 PIN_CTRL_REG0
+0x402a0004 PIN_CTRL_REG1
+0x402a0008 PIN_CTRL_REG2
+0x402a000c PIN_CTRL_REG3
+0x402a0010 PIN_CTRL_REG4
+0x402a0014 PIN_CTRL_REG5
+0x402a0018 Reserved
+0x402a001c Reserved
+0x402a0020 RFSDA0 gpio1
+0x402a0024 RFSCK0 gpio2
+0x402a0028 RFSEN0 gpio3
+0x402a002c RFSDA1 gpio4
+0x402a0030 RFSCK1 gpio5
+0x402a0034 RFSEN1 gpio6
+0x402a0038 RFCTL15 gpio7
+0x402a003c RFCTL16 gpio8
+0x402a0040 RFCTL17 gpio9
+0x402a0044 RFCTL18 gpio10
+0x402a0048 RFCTL19 gpio11
+0x402a004c RFCTL20 gpio12
+0x402a0050 RFCTL21 gpio13
+0x402a0054 RFCTL22 gpio14
+0x402a0058 RFCTL23 gpio15
+0x402a005c RFCTL24 gpio16
+0x402a0060 RFCTL25 gpio17
+0x402a0064 RFCTL26 gpio18
+0x402a0068 RFCTL0 gpio19
+0x402a006c RFCTL1 gpio20
+0x402a0070 RFCTL2 gpio21
+0x402a0074 RFCTL3 gpio22
+0x402a0078 RFCTL4 gpio23
+0x402a007c RFCTL5 gpio24
+0x402a0080 RFCTL6 gpio25
+0x402a0084 RFCTL7 gpio26
+0x402a0088 RFCTL8 gpio27
+0x402a008c RFCTL9 gpio28
+0x402a0090 RFCTL10 gpio29
+0x402a0094 RFCTL11 gpio30
+0x402a0098 RFCTL12 gpio31
+0x402a009c RFCTL13 gpio32
+0x402a00a0 RFCTL14 gpio33
+0x402a00a4 RFCTL27 gpio34
+0x402a00a8 XTL_EN gpio35
+0x402a00ac RFFE_SCK0 gpio36
+0x402a00b0 RFFE_SDA0 gpio37
+0x402a00b4 RFCTL28 gpio38
+0x402a00b8 RFCTL29 gpio39
+0x402a00bc SIMCLK0 gpio157
+0x402a00c0 SIMDA0 gpio158
+0x402a00c4 SIMRST0 gpio159
+0x402a00c8 SIMCLK1 gpio160
+0x402a00cc SIMDA1 gpio161
+0x402a00d0 SIMRST1 gpio162
+0x402a00d4 SIMCLK2 gpio154
+0x402a00d8 SIMDA2 gpio155
+0x402a00dc SIMRST2 gpio156
+0x402a00e0 SD0_D3 gpio148
+0x402a00e4 SD0_D2 gpio149
+0x402a00e8 SD0_CMD gpio150
+0x402a00ec SD0_D0 gpio151
+0x402a00f0 SD0_D1 gpio152
+0x402a00f4 SD0_CLK0 gpio153
+0x402a00f8 SD1_CLK gpio64
+0x402a00fc SD1_CMD gpio65
+0x402a0100 SD1_D0 gpio66
+0x402a0104 SD1_D1 gpio67
+0x402a0108 SD1_D2 gpio68
+0x402a010c SD1_D3 gpio69
+0x402a0110 IIS0DI gpio56
+0x402a0114 IIS0DO gpio57
+0x402a0118 IIS0CLK gpio58
+0x402a011c IIS0LRCK gpio59
+0x402a0120 U0TXD gpio60
+0x402a0124 U0RXD gpio61
+0x402a0128 U0CTS gpio62
+0x402a012c U0RTS gpio63
+0x402a0130 PTEST
+0x402a0134 ANA_INT
+0x402a0138 EXT_RST_B
+0x402a013c CHIP_SLEEP
+0x402a0140 XTL_BUF_EN0
+0x402a0144 XTL_BUF_EN1
+0x402a0148 CLK_32K
+0x402a014c AUD_SCLK
+0x402a0150 AUD_ADD0
+0x402a0154 AUD_ADSYNC
+0x402a0158 AUD_DAD1
+0x402a015c AUD_DAD0
+0x402a0160 AUD_DASYNC
+0x402a0164 ADI_D
+0x402a0168 ADI_SYNC
+0x402a016c ADI_SCLK
+0x402a0170 LCM_RSTN gpio50
+0x402a0174 DSI_TE gpio51
+0x402a0178 MTDO_ARM gpio80
+0x402a017c MTDI_ARM gpio81
+0x402a0180 MTCK_ARM gpio82
+0x402a0184 MTMS_ARM gpio83
+0x402a0188 MTRST_N_ARM gpio84
+0x402a018c DTDO_LTE gpio85
+0x402a0190 DTDI_LTE gpio86
+0x402a0194 DTCK_LTE gpio87
+0x402a0198 DTMS_LTE gpio88
+0x402a019c DRTCK_LTE gpio89
+0x402a01a0 NFWPN gpio98
+0x402a01a4 NFRB gpio99
+0x402a01a8 NFCLE gpio100
+0x402a01ac NFALE gpio101
+0x402a01b0 NFREN gpio102
+0x402a01b4 NFD4 gpio103
+0x402a01b8 NFD5 gpio104
+0x402a01bc NFD6 gpio105
+0x402a01c0 NFD7 gpio106
+0x402a01c4 NFD10 gpio107
+0x402a01c8 NFD11 gpio108
+0x402a01cc NFD14 gpio109
+0x402a01d0 NFCEN0 gpio110
+0x402a01d4 NFWEN gpio111
+0x402a01d8 NFD0 gpio112
+0x402a01dc NFD1 gpio113
+0x402a01e0 NFD2 gpio114
+0x402a01e4 NFD3 gpio115
+0x402a01e8 NFD8 gpio116
+0x402a01ec NFD9 gpio117
+0x402a01f0 NFD12 gpio118
+0x402a01f4 NFD13 gpio119
+0x402a01f8 NFD15 gpio120
+0x402a01fc CCIRD0 gpio40
+0x402a0200 CCIRD1 gpio41
+0x402a0204 CMMCLK gpio42
+0x402a0208 CMPCLK gpio43
+0x402a020c CMRST0 gpio44
+0x402a0210 CMRST1 gpio45
+0x402a0214 CMPD0 gpio46
+0x402a0218 CMPD1 gpio47
+0x402a021c SCL0 gpio48
+0x402a0220 SDA0 gpio49
+0x402a0224 SPI2_CSN gpio52
+0x402a0228 SPI2_DO gpio53
+0x402a022c SPI2_DI gpio54
+0x402a0230 SPI2_CLK gpio55
+0x402a0234 SPI0_CSN gpio90
+0x402a0238 SPI0_DO gpio91
+0x402a023c SPI0_DI gpio92
+0x402a0240 SPI0_CLK gpio93
+0x402a0244 MEMS_MIC_CLK0 gpio94
+0x402a0248 MEMS_MIC_DATA0 gpio95
+0x402a024c MEMS_MIC_CLK1 gpio96
+0x402a0250 MEMS_MIC_DATA1 gpio97
+0x402a0254 KEYOUT0 gpio121
+0x402a0258 KEYOUT1 gpio122
+0x402a025c KEYOUT2 gpio123
+0x402a0260 KEYIN0 gpio124
+0x402a0264 KEYIN1 gpio125
+0x402a0268 KEYIN2 gpio126
+0x402a026c SCL2 gpio127
+0x402a0270 SDA2 gpio128
+0x402a0274 CLK_AUX0 gpio129
+0x402a0278 IIS1DI gpio130
+0x402a027c IIS1DO gpio131
+0x402a0280 IIS1CLK gpio132
+0x402a0284 IIS1LRCK gpio133
+0x402a0288 TRACECLK gpio134
+0x402a028c TRACECTRL gpio135
+0x402a0290 TRACEDAT0 gpio136
+0x402a0294 TRACEDAT1 gpio137
+0x402a0298 TRACEDAT2 gpio138
+0x402a029c TRACEDAT3 gpio139
+0x402a02a0 TRACEDAT4 gpio140
+0x402a02a4 TRACEDAT5 gpio141
+0x402a02a8 TRACEDAT6 gpio142
+0x402a02ac TRACEDAT7 gpio143
+0x402a02b0 EXTINT0 gpio144
+0x402a02b4 EXTINT1 gpio145
+0x402a02b8 SCL3 gpio146
+0x402a02bc SDA3 gpio147
+0x402a02c0 U1TXD gpio70
+0x402a02c4 U1RXD gpio71
+0x402a02c8 U2TXD gpio72
+0x402a02cc U2RXD gpio73
+0x402a02d0 U3TXD gpio74
+0x402a02d4 U3RXD gpio75
+0x402a02d8 U3CTS gpio76
+0x402a02dc U3RTS gpio77
+0x402a02e0 U4TXD gpio78
+0x402a02e4 U4RXD gpio79
+EOF
+}
+
 function get_pin_name() {
 	pin_add=$1
 
-	case $pin_add in
-		0x402a0000) echo -n "PIN_CTRL_REG0" ;;
-		0x402a0004) echo -n "PIN_CTRL_REG1" ;;
-		0x402a0008) echo -n "PIN_CTRL_REG2" ;;
-		0x402a000c) echo -n "PIN_CTRL_REG3" ;;
-		0x402a0010) echo -n "PIN_CTRL_REG4" ;;
-		0x402a0014) echo -n "PIN_CTRL_REG5" ;;
-		0x402a0018) echo -n "Reserved " ;;
-		0x402a001c) echo -n "Reserved " ;;
-		0x402a0020) echo -n "RFSDA0" ;;
-		0x402a0024) echo -n "RFSCK0" ;;
-		0x402a0028) echo -n "RFSEN0" ;;
-		0x402a002c) echo -n "RFSDA1" ;;
-		0x402a0030) echo -n "RFSCK1" ;;
-		0x402a0034) echo -n "RFSEN1" ;;
-		0x402a0038) echo -n "RFCTL15" ;;
-		0x402a003c) echo -n "RFCTL16" ;;
-		0x402a0040) echo -n "RFCTL17" ;;
-		0x402a0044) echo -n "RFCTL18" ;;
-		0x402a0048) echo -n "RFCTL19" ;;
-		0x402a004c) echo -n "RFCTL20" ;;
-		0x402a0050) echo -n "RFCTL21" ;;
-		0x402a0054) echo -n "RFCTL22" ;;
-		0x402a0058) echo -n "RFCTL23" ;;
-		0x402a005c) echo -n "RFCTL24" ;;
-		0x402a0060) echo -n "RFCTL25" ;;
-		0x402a0064) echo -n "RFCTL26" ;;
-		0x402a0068) echo -n "RFCTL0" ;;
-		0x402a006c) echo -n "RFCTL1" ;;
-		0x402a0070) echo -n "RFCTL2" ;;
-		0x402a0074) echo -n "RFCTL3" ;;
-		0x402a0078) echo -n "RFCTL4" ;;
-		0x402a007c) echo -n "RFCTL5" ;;
-		0x402a0080) echo -n "RFCTL6" ;;
-		0x402a0084) echo -n "RFCTL7" ;;
-		0x402a0088) echo -n "RFCTL8" ;;
-		0x402a008c) echo -n "RFCTL9" ;;
-		0x402a0090) echo -n "RFCTL10" ;;
-		0x402a0094) echo -n "RFCTL11" ;;
-		0x402a0098) echo -n "RFCTL12" ;;
-		0x402a009c) echo -n "RFCTL13" ;;
-		0x402a00a0) echo -n "RFCTL14" ;;
-		0x402a00a4) echo -n "RFCTL27" ;;
-		0x402a00a8) echo -n "XTL_EN" ;;
-		0x402a00ac) echo -n "RFFE_SCK0" ;;
-		0x402a00b0) echo -n "RFFE_SDA0" ;;
-		0x402a00b4) echo -n "RFCTL28" ;;
-		0x402a00b8) echo -n "RFCTL29" ;;
-		0x402a00bc) echo -n "SIMCLK0" ;;
-		0x402a00c0) echo -n "SIMDA0" ;;
-		0x402a00c4) echo -n "SIMRST0" ;;
-		0x402a00c8) echo -n "SIMCLK1" ;;
-		0x402a00cc) echo -n "SIMDA1" ;;
-		0x402a00d0) echo -n "SIMRST1" ;;
-		0x402a00d4) echo -n "SIMCLK2" ;;
-		0x402a00d8) echo -n "SIMDA2" ;;
-		0x402a00dc) echo -n "SIMRST2" ;;
-		0x402a00e0) echo -n "SD0_D3" ;;
-		0x402a00e4) echo -n "SD0_D2" ;;
-		0x402a00e8) echo -n "SD0_CMD" ;;
-		0x402a00ec) echo -n "SD0_D0" ;;
-		0x402a00f0) echo -n "SD0_D1" ;;
-		0x402a00f4) echo -n "SD0_CLK0" ;;
-		0x402a00f8) echo -n "SD1_CLK" ;;
-		0x402a00fc) echo -n "SD1_CMD" ;;
-		0x402a0100) echo -n "SD1_D0" ;;
-		0x402a0104) echo -n "SD1_D1" ;;
-		0x402a0108) echo -n "SD1_D2" ;;
-		0x402a010c) echo -n "SD1_D3" ;;
-		0x402a0110) echo -n "IIS0DI" ;;
-		0x402a0114) echo -n "IIS0DO" ;;
-		0x402a0118) echo -n "IIS0CLK" ;;
-		0x402a011c) echo -n "IIS0LRCK" ;;
-		0x402a0120) echo -n "U0TXD" ;;
-		0x402a0124) echo -n "U0RXD" ;;
-		0x402a0128) echo -n "U0CTS" ;;
-		0x402a012c) echo -n "U0RTS" ;;
-		0x402a0130) echo -n "PTEST" ;;
-		0x402a0134) echo -n "ANA_INT" ;;
-		0x402a0138) echo -n "EXT_RST_B" ;;
-		0x402a013c) echo -n "CHIP_SLEEP" ;;
-		0x402a0140) echo -n "XTL_BUF_EN0" ;;
-		0x402a0144) echo -n "XTL_BUF_EN1" ;;
-		0x402a0148) echo -n "CLK_32K" ;;
-		0x402a014c) echo -n "AUD_SCLK" ;;
-		0x402a0150) echo -n "AUD_ADD0" ;;
-		0x402a0154) echo -n "AUD_ADSYNC" ;;
-		0x402a0158) echo -n "AUD_DAD1" ;;
-		0x402a015c) echo -n "AUD_DAD0" ;;
-		0x402a0160) echo -n "AUD_DASYNC" ;;
-		0x402a0164) echo -n "ADI_D" ;;
-		0x402a0168) echo -n "ADI_SYNC" ;;
-		0x402a016c) echo -n "ADI_SCLK" ;;
-		0x402a0170) echo -n "LCM_RSTN" ;;
-		0x402a0174) echo -n "DSI_TE" ;;
-		0x402a0178) echo -n "MTDO_ARM" ;;
-		0x402a017c) echo -n "MTDI_ARM" ;;
-		0x402a0180) echo -n "MTCK_ARM" ;;
-		0x402a0184) echo -n "MTMS_ARM" ;;
-		0x402a0188) echo -n "MTRST_N_ARM" ;;
-		0x402a018c) echo -n "DTDO_LTE" ;;
-		0x402a0190) echo -n "DTDI_LTE" ;;
-		0x402a0194) echo -n "DTCK_LTE" ;;
-		0x402a0198) echo -n "DTMS_LTE" ;;
-		0x402a019c) echo -n "DRTCK_LTE" ;;
-		0x402a01a0) echo -n "NFWPN" ;;
-		0x402a01a4) echo -n "NFRB" ;;
-		0x402a01a8) echo -n "NFCLE" ;;
-		0x402a01ac) echo -n "NFALE" ;;
-		0x402a01b0) echo -n "NFREN" ;;
-		0x402a01b4) echo -n "NFD4" ;;
-		0x402a01b8) echo -n "NFD5" ;;
-		0x402a01bc) echo -n "NFD6" ;;
-		0x402a01c0) echo -n "NFD7" ;;
-		0x402a01c4) echo -n "NFD10" ;;
-		0x402a01c8) echo -n "NFD11" ;;
-		0x402a01cc) echo -n "NFD14" ;;
-		0x402a01d0) echo -n "NFCEN0" ;;
-		0x402a01d4) echo -n "NFWEN" ;;
-		0x402a01d8) echo -n "NFD0" ;;
-		0x402a01dc) echo -n "NFD1" ;;
-		0x402a01e0) echo -n "NFD2" ;;
-		0x402a01e4) echo -n "NFD3" ;;
-		0x402a01e8) echo -n "NFD8" ;;
-		0x402a01ec) echo -n "NFD9" ;;
-		0x402a01f0) echo -n "NFD12" ;;
-		0x402a01f4) echo -n "NFD13" ;;
-		0x402a01f8) echo -n "NFD15" ;;
-		0x402a01fc) echo -n "CCIRD0" ;;
-		0x402a0200) echo -n "CCIRD1" ;;
-		0x402a0204) echo -n "CMMCLK" ;;
-		0x402a0208) echo -n "CMPCLK" ;;
-		0x402a020c) echo -n "CMRST0" ;;
-		0x402a0210) echo -n "CMRST1" ;;
-		0x402a0214) echo -n "CMPD0" ;;
-		0x402a0218) echo -n "CMPD1" ;;
-		0x402a021c) echo -n "SCL0" ;;
-		0x402a0220) echo -n "SDA0" ;;
-		0x402a0224) echo -n "SPI2_CSN" ;;
-		0x402a0228) echo -n "SPI2_DO" ;;
-		0x402a022c) echo -n "SPI2_DI" ;;
-		0x402a0230) echo -n "SPI2_CLK" ;;
-		0x402a0234) echo -n "SPI0_CSN" ;;
-		0x402a0238) echo -n "SPI0_DO" ;;
-		0x402a023c) echo -n "SPI0_DI" ;;
-		0x402a0240) echo -n "SPI0_CLK" ;;
-		0x402a0244) echo -n "MEMS_MIC_CLK0" ;;
-		0x402a0248) echo -n "MEMS_MIC_DATA0" ;;
-		0x402a024c) echo -n "MEMS_MIC_CLK1" ;;
-		0x402a0250) echo -n "MEMS_MIC_DATA1" ;;
-		0x402a0254) echo -n "KEYOUT0" ;;
-		0x402a0258) echo -n "KEYOUT1" ;;
-		0x402a025c) echo -n "KEYOUT2" ;;
-		0x402a0260) echo -n "KEYIN0" ;;
-		0x402a0264) echo -n "KEYIN1" ;;
-		0x402a0268) echo -n "KEYIN2" ;;
-		0x402a026c) echo -n "SCL2" ;;
-		0x402a0270) echo -n "SDA2" ;;
-		0x402a0274) echo -n "CLK_AUX0" ;;
-		0x402a0278) echo -n "IIS1DI" ;;
-		0x402a027c) echo -n "IIS1DO" ;;
-		0x402a0280) echo -n "IIS1CLK" ;;
-		0x402a0284) echo -n "IIS1LRCK" ;;
-		0x402a0288) echo -n "TRACECLK" ;;
-		0x402a028c) echo -n "TRACECTRL" ;;
-		0x402a0290) echo -n "TRACEDAT0" ;;
-		0x402a0294) echo -n "TRACEDAT1" ;;
-		0x402a0298) echo -n "TRACEDAT2" ;;
-		0x402a029c) echo -n "TRACEDAT3" ;;
-		0x402a02a0) echo -n "TRACEDAT4" ;;
-		0x402a02a4) echo -n "TRACEDAT5" ;;
-		0x402a02a8) echo -n "TRACEDAT6" ;;
-		0x402a02ac) echo -n "TRACEDAT7" ;;
-		0x402a02b0) echo -n "EXTINT0" ;;
-		0x402a02b4) echo -n "EXTINT1" ;;
-		0x402a02b8) echo -n "SCL3" ;;
-		0x402a02bc) echo -n "SDA3" ;;
-		0x402a02c0) echo -n "U1TXD" ;;
-		0x402a02c4) echo -n "U1RXD" ;;
-		0x402a02c8) echo -n "U2TXD" ;;
-		0x402a02cc) echo -n "U2RXD" ;;
-		0x402a02d0) echo -n "U3TXD" ;;
-		0x402a02d4) echo -n "U3RXD" ;;
-		0x402a02d8) echo -n "U3CTS" ;;
-		0x402a02dc) echo -n "U3RTS" ;;
-		0x402a02e0) echo -n "U4TXD" ;;
-		0x402a02e4) echo -n "U4RXD" ;;
-		*) echo -n "unknow" ;;
-	esac
+	pin_name=$(show_pininfo | grep $1 | awk '{print $2}')
+	if [ -z $pin_name ]; then
+		pin_name="unknow"
+	fi
+
+	echo -n $pin_name
 }
 
 function print_pin_bit() {
@@ -452,21 +460,21 @@ function check_by_value() {
 }
 
 filename=$(basename $0)
-function print_error() {
-	echo " $filename <[-r] reg>|<-v value>"
+function help() {
+	echo "$filename <-r reg>|<-v value>|-l|-h"
+	echo "  -r: pin reg"
+	echo "  -v: pin value"
+	echo "  -l: list pin"
+	echo "  -h: help"
+	exit
 }
 
-if (($#==1)); then
-	check_by_addr $1
-elif (($#==2)); then
-	if [[ "$1" == "-r" ]]; then
-		check_by_addr $2
-	elif [[ "$1" == "-v" ]]; then
-		check_by_value $2
-	else
-		print_error
-	fi
-else
-	print_error
-fi
+case $1 in
+	-r) check_by_addr $2 ;;
+	-v) check_by_value $2 ;;
+	-l) show_pininfo ;;
+	-h) help ;;
+	*)	help ;;
+esac
+
 
