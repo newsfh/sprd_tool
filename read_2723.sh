@@ -39,6 +39,9 @@ if (($#>0)); then
 
 		shift 1
 	done
+else
+	help
+	exit
 fi
 
 function hex() {
