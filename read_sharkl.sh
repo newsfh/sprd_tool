@@ -629,6 +629,18 @@ echo " "
 fi
 
 if (( $READ_SLEEP_STATUS & $FUNC_ENABLE )); then
+function print_pwr_status_info() {
+	reg_val=$1
+	reg_bit=$2
+	src=$3
+	reg_mask=0xf
+	arr=(WAKEUP POWER_ON_SEQ POWER_ON RST_ASSERT RST_GAP RESTORE ISO_OFF SHUTDOWN ACTIVE STANDBY ISO_ON SAVE_ST SAVE_GAP POWER_OFF BISR_RST BISR_PROC)
+
+	echo -n "$src: "
+	index=$(printf "%d" $(($reg_val >> $reg_bit & $reg_mask)))
+	echo "${arr[$index]} "
+}
+
 echo "===============================  sleep status  ================================="
 ##### CP_SLP_STATUS_DBG0
 val=$(read_reg 0x402b0000 0xb4)
@@ -650,6 +662,75 @@ print_bit $val 3 "mcu_stop"
 print_bit $val 2 "ahb_stop"
 print_bit $val 1 "mtx_stop"
 print_bit $val 0 "arm_stop"
+echo " "
+
+##### PWR_STATUS0_DBG
+val=$(read_reg 0x402b0000 0xbc)
+echo "=== PWR_STATUS0_DBG(0x402b00bc : $val) ==="
+
+print_pwr_status_info $val 28 "PD_MM_TOP_STATE"
+print_pwr_status_info $val 24 "PD_GPU_TOP_STATE"
+print_pwr_status_info $val 20 "PD_AP_SYS_STATE"
+print_pwr_status_info $val 16 "PD_CA7_C3_STATE"
+print_pwr_status_info $val 12 "PD_CA7_C2_STATE"
+print_pwr_status_info $val 8 "PD_CA7_C1_STATE"
+print_pwr_status_info $val 4 "PD_CA7_C0_STATE"
+print_pwr_status_info $val 0 "PD_CA7_TOP_STATE"
+echo " "
+
+##### PWR_STATUS1_DBG
+val=$(read_reg 0x402b0000 0xc0)
+echo "=== PWR_STATUS1_DBG(0x402b00c0 : $val) ==="
+
+print_pwr_status_info $val 28 "PD_CP0_CEVA_1_STATE"
+print_pwr_status_info $val 24 "PD_CP0_CEVA_0_STATE"
+print_pwr_status_info $val 20 "PD_CP0_GSM_0_STATE"
+print_pwr_status_info $val 16 "PD_CP0_GSM_1_STATE"
+print_pwr_status_info $val 12 "PD_CP0_HU3GE_STATE"
+print_pwr_status_info $val 8 "PD_CP0_ARM9_1_STATE"
+print_pwr_status_info $val 4 "PD_CP0_ARM9_0_STATE"
+print_pwr_status_info $val 0 "PD_CP0_TD_STATE"
+echo " "
+
+##### PWR_STATUS2_DBG
+val=$(read_reg 0x402b0000 0xc4)
+echo "=== PWR_STATUS2_DBG(0x402b00c4 : $val) ==="
+
+#print_pwr_status_info $val 28 "PD_CP0_CEVA_1_STATE"
+print_pwr_status_info $val 24 "PD_PUB_SYS_STATE"
+print_pwr_status_info $val 20 "PD_CP1_COMWRAP_STATE"
+print_pwr_status_info $val 16 "PD_CP1_LTE_P2_STATE"
+print_pwr_status_info $val 12 "PD_CP1_LTE_P1_STATE"
+print_pwr_status_info $val 8 "PD_CP1_CEVA_STATE"
+print_pwr_status_info $val 4 "PD_CP1_CA5_STATE"
+#print_pwr_status_info $val 0 "PD_CP0_TD_STATE"
+echo " "
+
+##### SLEEP_CTRL
+val=$(read_reg 0x402b0000 0xcc)
+echo "=== SLEEP_CTRL(0x402b00cc : $val) ==="
+
+print_bit $val 28 "VCP1_FORCE_LIGHT_SLEEP"
+print_bit $val 27 "VCP0_FORCE_LIGHT_SLEEP"
+print_bit $val 26 "CP1_FORCE_LIGHT_SLEEP"
+print_bit $val 25 "CP0_FORCE_LIGHT_SLEEP"
+print_bit $val 24 "AP_FORCE_LIGHT_SLEEP"
+print_bit $val 21 "ARM7_FORCE_DEEP_SLEEP"
+print_bit $val 20 "VCP1_FORCE_DEEP_SLEEP"
+print_bit $val 19 "VCP0_FORCE_DEEP_SLEEP"
+print_bit $val 18 "CP1_FORCE_DEEP_SLEEP"
+print_bit $val 17 "CP0_FORCE_DEEP_SLEEP"
+print_bit $val 16 "AP_FORCE_DEEP_SLEEP"
+print_bit $val 12 "VCP1_LIGHT_SLEEP"
+print_bit $val 11 "VCP0_LIGHT_SLEEP"
+print_bit $val 10 "CP1_LIGHT_SLEEP"
+print_bit $val 9 "CP0_LIGHT_SLEEP"
+print_bit $val 8 "AP_LIGHT_SLEEP"
+print_bit $val 4 "VCP1_DEEP_SLEEP"
+print_bit $val 3 "VCP0_DEEP_SLEEP"
+print_bit $val 2 "CP1_DEEP_SLEEP"
+print_bit $val 1 "CP0_DEEP_SLEEP"
+print_bit $val 0 "AP_DEEP_SLEEP"
 echo " "
 
 
