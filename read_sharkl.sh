@@ -641,6 +641,18 @@ function print_pwr_status_info() {
 	echo "${arr[$index]} "
 }
 
+function print_sleep_status_info() {
+	reg_val=$1
+	reg_bit=$2
+	src=$3
+	reg_mask=0xf
+	arr=(DEEP_SLEEP XTL_WAIT XTLBUF_WAIT DEEP_SLEEP_XTLON PLL_PWR_WAIT WAKEUP WAKEUP_LOCK NULL NULL NULL NULL NULL NULL NULL NULL NULL)
+
+	echo -n "$src: "
+	index=$(printf "%d" $(($reg_val >> $reg_bit & $reg_mask)))
+	echo "${arr[$index]} "
+}
+
 echo "===============================  sleep status  ================================="
 ##### CP_SLP_STATUS_DBG0
 val=$(read_reg 0x402b0000 0xb4)
@@ -731,6 +743,18 @@ print_bit $val 3 "VCP0_DEEP_SLEEP"
 print_bit $val 2 "CP1_DEEP_SLEEP"
 print_bit $val 1 "CP0_DEEP_SLEEP"
 print_bit $val 0 "AP_DEEP_SLEEP"
+echo " "
+
+##### SLEEP_STATUS
+val=$(read_reg 0x402b0000 0xd4)
+echo "=== SLEEP_STATUS(0x402b00d4 : $val) ==="
+
+print_sleep_status_info $val 20 "ARM7_SLP_STATUS"
+print_sleep_status_info $val 16 "VCP1_SLP_STATUS"
+print_sleep_status_info $val 12 "VCP0_SLP_STATUS"
+print_sleep_status_info $val 8 "CP1_SLP_STATUS"
+print_sleep_status_info $val 4 "CP0_SLP_STATUS"
+print_sleep_status_info $val 0 "AP_SLP_STATUS"
 echo " "
 
 
