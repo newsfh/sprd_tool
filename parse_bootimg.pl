@@ -93,4 +93,24 @@ printf "  dt: offset=0x$dt_page_off, size=0x$dt_size\n";
 
 print "======================================================\n";
 
+if ($kernel_sz_dec != 0) {
+	$offset=hex($kernel_page_off);
+	system("dd if=$bootimg of=bootimg-kernel bs=1 skip=$offset count=$kernel_sz_dec 2>/dev/null");
+}
+
+if ($ramdisk_sz_dec != 0) {
+	$offset=hex($ramdisk_page_off);
+	system("dd if=$bootimg of=bootimg-ramdisk bs=1 skip=$offset count=$ramdisk_sz_dec 2>/dev/null");
+}
+
+if ($second_sz_dec != 0) {
+	$offset=hex($second_page_off);
+	system("dd if=$bootimg of=bootimg-second bs=1 skip=$offset count=$second_sz_dec 2>/dev/null");
+}
+
+if ($dt_sz_dec != 0) {
+	$offset=hex($dt_page_off);
+	system("dd if=$bootimg of=bootimg-dtimg bs=1 skip=$offset count=$dt_sz_dec 2>/dev/null");
+}
+
 close(FP1);
