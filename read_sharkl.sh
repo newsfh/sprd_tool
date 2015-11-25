@@ -7,7 +7,27 @@ READ_DDR_FREQ=0x8
 READ_XTL_INFO=0x10
 READ_PLL_SEL=0X20
 
-filename=$(basename $0)
+if [ -e /system/bin/sh ]; then
+	echo "android"
+	LOOKAT="lookat"
+	PRINTF="busybox printf"
+	TR="busybox tr"
+	AWK="busybox awk"
+	SED="busybox sed"
+	BASENAME="busybox basename"
+	EXPR="busybox expr"
+else
+	echo "ubuntu"
+	LOOKAT="adb shell lookat"
+	PRINTF="printf"
+	TR="tr"
+	AWK="awk"
+	SED="sed"
+	BASENAME="basename"
+	EXPR="expr"
+fi
+
+filename=$($BASENAME $0)
 
 function help() {
 	echo "$filename [-h|-a|-p|-m|-s|-d|-x|-l]"
@@ -44,34 +64,34 @@ else
 fi
 
 function hex() {
-	printf "0x%08x" $1
+	$PRINTF "0x%08x" $1
 }
 
 function hex1() {
-	printf "0x%02x" $1
+	$PRINTF "0x%02x" $1
 }
 
 function hex3() {
-	printf "0x%02x" $1
+	$PRINTF "0x%02x" $1
 }
 
 function hex4() {
-	printf "0x%02x" $1
+	$PRINTF "0x%02x" $1
 }
 
 function hex7() {
-	printf "0x%02x" $1
+	$PRINTF "0x%02x" $1
 }
 
 function read_reg() {
-	adb shell lookat $(hex $(($1 + $2))) | sed 's/\r$//'
+	$LOOKAT $(hex $(($1 + $2))) | $SED 's/\r$//'
 }
 
 function bin_hex() {
 	value=$1
 	vshift=$2
 	vmask=$3
-	echo -n $(`expr hex$vmask` $(($value >> $vshift & $vmask)))
+	echo -n $(`$EXPR hex$vmask` $(($value >> $vshift & $vmask)))
 }
 
 function print_bit() {
@@ -312,7 +332,7 @@ function print_pin_drv() {
 	reg_val=$1
 	reg_bit=$2
 
-	drv=$(echo -n $(printf "%d" $(($reg_val >> $reg_bit & 0xf))))
+	drv=$(echo -n $($PRINTF "%d" $(($reg_val >> $reg_bit & 0xf))))
 	echo -n "DS($drv) "
 }
 
@@ -324,7 +344,7 @@ function print_sel_info() {
 	arr=($5)
 
 	echo -n "$src=>"
-	index=$(printf "%d" $(($reg_val >> $reg_bit & $reg_mask)))
+	index=$($PRINTF "%d" $(($reg_val >> $reg_bit & $reg_mask)))
 	echo -n "${arr[$index]} "
 }
 
@@ -462,11 +482,13 @@ function print_reg5_pin() {
 	echo ""
 }
 
-adb shell lookat -l186 0x402a0000 | while read LINE
+$LOOKAT -l186 0x402a0000 | while read LINE
 do
-	if [[ "$LINE" =~ "0x" ]]; then
-		pin_add=$(echo $LINE | awk '{print $1}' | sed 's/\r$//');
-		pin_val=$(echo $LINE | awk '{print $3}' | sed 's/\r$//');
+#	if [[ "$LINE" =~ "0x" ]]; then
+	is_hex=$(echo $LINE | $AWK '/0x/{print 1}')
+	if [[ $is_hex ]]; then
+		pin_add=$(echo $LINE | $AWK '{print $1}' | $SED 's/\r$//');
+		pin_val=$(echo $LINE | $AWK '{print $3}' | $SED 's/\r$//');
 		if [[ "$pin_add" == "0x402a0000" ]]; then
 			print_reg0_pin $pin_add $pin_val
 		elif [[ "$pin_add" == "0x402a0004" ]]; then
@@ -637,7 +659,7 @@ function print_pwr_status_info() {
 	arr=(WAKEUP POWER_ON_SEQ POWER_ON RST_ASSERT RST_GAP RESTORE ISO_OFF SHUTDOWN ACTIVE STANDBY ISO_ON SAVE_ST SAVE_GAP POWER_OFF BISR_RST BISR_PROC)
 
 	echo -n "$src: "
-	index=$(printf "%d" $(($reg_val >> $reg_bit & $reg_mask)))
+	index=$($PRINTF "%d" $(($reg_val >> $reg_bit & $reg_mask)))
 	echo "${arr[$index]} "
 }
 
@@ -649,7 +671,7 @@ function print_sleep_status_info() {
 	arr=(DEEP_SLEEP XTL_WAIT XTLBUF_WAIT DEEP_SLEEP_XTLON PLL_PWR_WAIT WAKEUP WAKEUP_LOCK NULL NULL NULL NULL NULL NULL NULL NULL NULL)
 
 	echo -n "$src: "
-	index=$(printf "%d" $(($reg_val >> $reg_bit & $reg_mask)))
+	index=$($PRINTF "%d" $(($reg_val >> $reg_bit & $reg_mask)))
 	echo "${arr[$index]} "
 }
 
@@ -766,9 +788,9 @@ if (($READ_DDR_FREQ & $FUNC_ENABLE)); then
 echo "===============================  DDR freq  ================================="
 
 function read_DDR_freq() {
-	REG_AON_CLK_EMC_CFG=$(adb shell lookat 0x402d0058|tr -d '\r')
-	REG_AON_APB_DPLL_CFG1=$(adb shell lookat 0x402e004c|tr -d '\r')
-	REG_AON_APB_DPLL_CFG2=$(adb shell lookat 0x402e0050|tr -d '\r')
+	REG_AON_CLK_EMC_CFG=$($LOOKAT 0x402d0058|$TR -d '\r')
+	REG_AON_APB_DPLL_CFG1=$($LOOKAT 0x402e004c|$TR -d '\r')
+	REG_AON_APB_DPLL_CFG2=$($LOOKAT 0x402e0050|$TR -d '\r')
 
 	clk_emc_sel=$(($REG_AON_CLK_EMC_CFG & 7))
 	clk_emc_div=$(($REG_AON_CLK_EMC_CFG >> 8 & 0x7))
