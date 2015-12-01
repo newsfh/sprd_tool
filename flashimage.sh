@@ -1,5 +1,11 @@
 #!/bin/sh
 
+##########################################################################
+# author: hua.fang
+# date: 2014/10/20
+# function: flash image
+##########################################################################
+
 #PART_FOLDER="/dev/block/platform/sprd-sdhci.3/by-name";
 PART_FOLDER="/dev/block/platform/sdio_emmc/by-name";
 SCRIPT_NAME=$(basename $0)

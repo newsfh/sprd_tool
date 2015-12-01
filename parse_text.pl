@@ -1,5 +1,11 @@
 #!/usr/bin/perl
 
+##########################################################################
+# author: hua.fang
+# date: 2015/10/20
+# function: parse kernel text section
+##########################################################################
+
 if ($#ARGV < 1 ) {
 	die "param wrong!\n File should be dump_txt.mem and vmlinux_txt.mem";
 }

@@ -1,5 +1,11 @@
 #!/system/bin/sh
 
+##########################################################################
+# author: hua.fang
+# date: 2015/10/20
+# function: dump ddr freq according to ddr config
+##########################################################################
+
 echo "DDR freq :" > /data/ddr_freq.txt
 i=0
 

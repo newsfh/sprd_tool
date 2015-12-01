@@ -1,5 +1,11 @@
 #!/bin/sh
 
+##########################################################################
+# author: hua.fang
+# date: 2014/10/20
+# function: generate patch according to commit id
+##########################################################################
+
 if [ $# -lt 2 ] || [ $# -gt 3 ]; then
 	filename=$(basename "$0")
 	echo "error: param not right!"

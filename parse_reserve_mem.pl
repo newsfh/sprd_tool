@@ -1,5 +1,11 @@
 #!/usr/bin/perl
 
+##########################################################################
+# author: hua.fang
+# date: 2014/11/20
+# function: parse reserve memory
+##########################################################################
+
 if (! open MYFILE, $ARGV[0]) {
 	die "can not open file $ARGV[0]";
 }

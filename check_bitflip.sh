@@ -1,5 +1,13 @@
 #!/bin/sh
 
+##########################################################################
+# author: hua.fang
+# date: 2015/5/30
+# function: check whether exists ddr bit flip
+# 			check_bitflip.sh <ap_sysdump_file>
+#			vmlinux should be in the same folder
+##########################################################################
+
 filename=$(basename $0)
 message()
 {

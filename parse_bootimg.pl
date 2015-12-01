@@ -1,5 +1,11 @@
 #!/usr/bin/perl
 
+##########################################################################
+# author: hua.fang
+# date: 2015/9/20
+# function: parse boot.img
+##########################################################################
+
 # if ($#ARGV < 1 ) {
 # 	die "param wrong!\n File should be dump_txt.mem and vmlinux_txt.mem";
 # }

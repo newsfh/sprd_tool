@@ -1,3 +1,9 @@
+##########################################################################
+# author: hua.fang
+# date: 2015/8/20
+# function: read sharkl register
+##########################################################################
+
 FUNC_ENABLE=0
 
 READ_PIN=0x1
@@ -8,7 +14,6 @@ READ_XTL_INFO=0x10
 READ_PLL_SEL=0X20
 
 if [ -e /system/bin/sh ]; then
-	echo "android"
 	LOOKAT="lookat"
 	PRINTF="busybox printf"
 	TR="busybox tr"
@@ -17,7 +22,6 @@ if [ -e /system/bin/sh ]; then
 	BASENAME="busybox basename"
 	EXPR="busybox expr"
 else
-	echo "ubuntu"
 	LOOKAT="adb shell lookat"
 	PRINTF="printf"
 	TR="tr"
