@@ -1,0 +1,13 @@
+;; view struct thread_info by sp address
+
+GOSUB VIEW_THREADINFO_BY_SP 0xC7EBBDFC
+
+enddo
+
+VIEW_THREADINFO_BY_SP:
+	LOCAL &sp_ptr
+	ENTRY &sp_ptr
+	
+	v.v (struct thread_info*)(&sp_ptr & 0xffffe000)
+
+; END VIEW_THREADINFO_BY_SP

@@ -1,0 +1,29 @@
+        WINCLEAR INFOS  
+        AREA.CREATE INFOS 80. 2000.
+        WinPOS 0,0,,,,, INFOS  
+        AREA.VIEW INFOS  
+        AREA.CLEAR INFOS  
+        AREA.SELECT INFOS  
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+; set fp value here
+;
+&cur_fp=0xC7EBBE24
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+&cur_pc=v.value(*((unsigned long*)&cur_fp))
+&i=0.
+
+while &cur_pc!=0&&&i!=100
+(
+	print "pc=" &cur_pc ", fp=" &cur_fp ", sym=" symbol.name(p:&cur_pc)
+
+	&cur_fp=&cur_fp-0xc
+	&cur_fp=v.value(*((unsigned long*)&cur_fp))
+	&cur_pc=v.value(*((unsigned long*)&cur_fp))
+	&i=&i+1.
+)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

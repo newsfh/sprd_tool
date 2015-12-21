@@ -1,0 +1,52 @@
+system.mode down
+system.reset
+
+system.jtagclock 10mhz
+
+system.cpu CORTEXA7MPCORE 
+system.config CORENUMBER 1
+core.assign 1
+SYStem.MultiCore MEMORYACCESSPORT 0
+system.MultiCore DEBUGACCESSPORT 1
+SYStem.MultiCore JTAGACCESSPORT 1
+
+;SYS.CONFIG.DRPOST 0. 
+;SYS.CONFIG.DRPRE 1. 
+;SYS.CONFIG.IRPOST 0. 
+;SYS.CONFIG.IRPRE 4.
+
+system.multicore IRPOST 0
+system.multicore IRPRE 0
+system.multicore DRPOST 0
+system.multicore DRPRE 0
+
+system.config DAPIRPOST 0
+SYStem.Config DAPDRPOST 0
+system.config DAPIRPRE 0
+system.config DAPDRPRE 0
+
+
+system.config corebase 0x80030000
+
+SYStem.CONFIG FUNNELBASE       0x80001000
+;SYStem.CONFIG ETFBASE          0x80003000 ;comment for codeviser
+SYStem.CONFIG TPIUBASE         0x80004000 
+;SYStem.CONFIG ETRBASE          0x80005000 
+;SYStem.CONFIG STMBASE          0x80006000 
+                      
+SYStem.CONFIG COREBASE         0x80030000 
+;SYStem.CONFIG BMCBASE          0x80031000 ;comment for codeviser
+SYStem.CONFIG ETMBASE          0x8003c000 
+
+TrOnchip.Set DABORT OFF
+TrOnchip.Set PABORT OFF
+TrOnchip.Set UNDEF OFF
+TrOnchip.Set RESET OFF
+
+system.config ETMFUNNELPORT 0. 
+
+system.cpuaccess enable
+
+;system.memaccess dap
+
+system.mode up

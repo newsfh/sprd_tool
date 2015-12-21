@@ -1,0 +1,4 @@
+;; watch debug information
+
+; sec_debug_log
+v.v %string (struct sched_log*)0xc6a00000

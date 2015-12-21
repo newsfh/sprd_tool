@@ -1,0 +1,52 @@
+;system.mode down
+;system.reset
+
+system.jtagclock 5mhz
+
+system.cpu CORTEXA7MPCORE
+system.config CORENUMBER 4
+;core.num 4
+core.assign 1 2 3 4
+;core.assign 1 
+
+;system.multicore JTAGACCESSPORT 2
+system.multicore MEMORYACCESSPORT 0
+system.multicore DEBUGACCESSPORT 1
+
+;system.multicore COREJTAGPORT x
+
+system.multicore IRPOST 0
+system.multicore IRPRE 0
+system.multicore DRPOST 0
+system.multicore DRPRE 0
+
+system.multicore DAPIRPOST 0
+system.multicore DAPIRPRE 0
+system.multicore DAPDRPOST 0
+system.multicore DAPDRPRE 0
+
+system.config FUNNELBASE 0x80001000
+system.config ETBBASE    0x80003000
+system.config TPIUBASE   0x80004000
+;system.config COREBASE   0x80030000
+system.config COREBASE   0x80030000 0x80032000 0x80034000 0x80036000
+system.config CTIBASE    0x80038000 0x80039000 0x8003A000 0x8003B000
+system.config ETMBASE    0x8003C000 0x8003D000 0x8003E000 0x8003F000
+
+;system.config ETMFUNNELPORT 0. 1.
+
+system.cpuaccess enable
+system.memaccess dap
+
+;system.mode up
+
+;core.select 0
+
+tronchip.set.dabort.off
+tronchip.set.pabort.off
+tronchip.set.undef.off
+tronchip.set.reset.off
+
+task.config C:\T32\demo\arm\kernel\linux\linux.t32
+menu.REPROGRAM C:\T32\demo\arm\kernel\linux\linux.men
+

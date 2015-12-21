@@ -1,0 +1,29 @@
+;system.mode down
+;system.reset
+
+system.jtagclock 5.0Mhz
+
+system.cpu CORTEXA53
+system.config CORENUMBER 8
+core.assign 1 2 3 4 5 6 7 8
+
+sys.config corebase 0x81410000
+sys.config.ctibase 0x81420000
+sys.config.bmc.base 0x81430000
+sys.config.etm.base 0x81440000
+
+;system.multicore jtagaccessport 0
+;system.multicore corejtagport 0
+system.config memoryaccessport 0
+system.config axiaccessport 0
+system.config debugaccessport 1
+
+;b.set 0x9f7055c8
+;system.mode prepare
+
+system.memaccess dap
+system.multicore swdp on
+
+;system.mode attach
+;break;
+;go

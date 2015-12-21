@@ -1,0 +1,5 @@
+&start_addr=0xC7EBA000
+&end_addr=0xC7EBc000
+
+d.p %y.l (&start_addr)++(&end_addr-&start_addr)
+

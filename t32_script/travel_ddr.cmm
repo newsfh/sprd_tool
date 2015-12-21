@@ -1,0 +1,21 @@
+        WINCLEAR INFOS  
+        AREA.CREATE INFOS 80. 2000.
+        WinPOS 0,0,,,,, INFOS  
+        AREA.VIEW INFOS  
+        AREA.CLEAR INFOS  
+        AREA.SELECT INFOS  
+
+	&i=0.
+	&add=0xda000c54
+	while &add<0xdfffffff
+	(
+		&data=data.long(eahb:&add)
+		if &data==0x790
+		(
+			&i=&i+1
+			print &i " : " &add "  " &data
+		)
+		&add=&add+0x1000
+	)
+
+	print "end"
