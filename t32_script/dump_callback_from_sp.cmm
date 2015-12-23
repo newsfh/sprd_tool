@@ -1,0 +1,4 @@
+&sp_addr=0xC7EBBDFC
+
+d.p %y.l (&sp_addr&0xffffe000)++0x2000
+

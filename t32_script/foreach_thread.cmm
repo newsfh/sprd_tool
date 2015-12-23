@@ -65,7 +65,7 @@ TRAVERSE_THREAD:
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;   print stack
-PrintTaskInfo0:
+PrintTaskInfo:
 	local &TASK_PTR
 	entry &TASK_PTR
 
@@ -75,8 +75,8 @@ PrintTaskInfo0:
 	)
 	&i=&i+1.
 
-	print &i "  " v.value(&TASK_PTR) "  " v.string(((struct task_struct*)&TASK_PTR)->comm)
-	print "      " v.value(&TASK_PTR) "  " v.value(((struct task_struct*)&TASK_PTR)->stack)
+	print &i "  Task: " v.value(&TASK_PTR) "  Name: " v.string(((struct task_struct*)&TASK_PTR)->comm)
+	print "   CPU: " v.value(((struct thread_info*)((struct task_struct*)&TASK_PTR)->stack)->cpu) "  Thread: " v.value(((struct task_struct*)&TASK_PTR)->stack)
 
 	return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;; end print stack
@@ -99,7 +99,7 @@ PrintTaskInfo1:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;; end PrintTaskInfo
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;	print task info
-PrintTaskInfo:
+PrintTaskInfo2:
 	local &TASK_PTR &task_state &task_state_name
 	entry &TASK_PTR
 

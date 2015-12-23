@@ -18,6 +18,7 @@
 *.cfgtmp
 *.dts.tmp
 *.bk
+*.bak
 *.old
 
 # Build tree
