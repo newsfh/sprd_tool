@@ -1,0 +1,2 @@
+
+v.v (struct rq*)((char*)&runqueues+__per_cpu_offset[0])
