@@ -54,3 +54,21 @@ tronchip.set.reset.off
 task.config C:\T32\demo\arm\kernel\linux\linux-3.x\linux3.t32
 menu.REPROGRAM C:\T32\demo\arm\kernel\linux\linux-3.x\linux.men
 
+dialog.file "*\vmlinux"
+ENTRY &vmlinux_file
+if "&vmlinux_file"==""
+(
+	enddo
+)
+
+&dump_path=os.file.path(&vmlinux_file)
+cd &dump_path
+dialog.file *.lst
+ENTRY &dump_file
+if "&dump_file"==""
+(
+	enddo
+)
+
+d.load.binary &dump_file 0xc0000000 /noclear
+d.load.elf &vmlinux_file /nocode
