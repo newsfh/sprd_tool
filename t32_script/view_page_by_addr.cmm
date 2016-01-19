@@ -1,6 +1,7 @@
 ;; view page struct by memory address
 
-GOSUB ADDR_TO_PAGE 0xC69FFE00
+&base_address=0xc0000000
+GOSUB ADDR_TO_PAGE 0xe4f28700
 
 enddo
 
@@ -11,7 +12,7 @@ ADDR_TO_PAGE:
 	&MEM_MAP_ADDR=v.value(mem_map)
 	&PAGE_SIZE=v.value(sizeof(struct page))
 
-	v.v %HEX %string (struct page*)(&MEM_MAP_ADDR+((&addr_ptr-0xc0000000)>>12.)*&PAGE_SIZE)
+	v.v %HEX %string (struct page*)(&MEM_MAP_ADDR+((&addr_ptr-&base_address)>>12.)*&PAGE_SIZE)
 
 	RETURN
 ; END ADDR_TO_PAGE

@@ -59,7 +59,7 @@ else
 		input_image=$input_file
 		if [[ -z $(file $input_image | grep "ext4 filesystem data") ]]; then
 			input_image=$input_file.ext4
-			simg2img $input_file $input_image
+			~/bin/other/simg2img $input_file $input_image
 		fi
 
 		sudo mount -t ext4 -o loop $input_image $output_folder

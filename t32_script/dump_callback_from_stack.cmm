@@ -1,4 +1,4 @@
-&stack_addr=0xC0A24000
+&stack_addr=0xE08D9D60
 
 d.p %y.l (&stack_addr)++(0x2000)
 

@@ -2,3 +2,6 @@
 
 ; sec_debug_log
 v.v %string (struct sched_log*)0xc6a00000
+
+; sec_debug_last_regs_access
+v.v %hex (struct sec_debug_regs_access*)0xc6bfff30

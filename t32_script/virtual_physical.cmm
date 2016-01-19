@@ -6,8 +6,8 @@
         AREA.SELECT INFOS  
 
 
-&pgd=0xE9BBC000
-&virtual_addr=0xF6801004
+&pgd=0xD7D84000
+&virtual_addr=0x74a03000
 
 &first_pg_inx=((&virtual_addr>>20.)*4)
 &first_pg_val=data.long(D:&pgd+&first_pg_inx)
@@ -15,7 +15,10 @@
 if v.value(&first_pg_val&0x3)==0x2
 (
 	&phy_add=v.value((&first_pg_val&0xfff00000)+(&virtual_addr&0xfffff))
+
 	print &virtual_addr " => " &phy_add
+	print "info:"
+	print "pgd=&pgd , first_pg_inx=&first_pg_inx , first_pg_val=&first_pg_val"
 )
 else if v.value(&first_pg_val&0x3)==0x1
 (
@@ -23,7 +26,11 @@ else if v.value(&first_pg_val&0x3)==0x1
 	&sec_pg_inx=v.value(((&virtual_addr>>12.)&0xff)*4)
 	&sec_pg_val=data.long(D:&sec_pgd+&sec_pg_inx)
 	&phy_add=v.value((&sec_pg_val&0xfffff000)+(&virtual_addr&0xfff))
+
 	print &virtual_addr " => " &phy_add
+	print "info:"
+	print "pgd=&pgd , first_pg_inx=&first_pg_inx , first_pg_val=&first_pg_val"
+	print "sec_pgd=&sec_pgd , sec_pg_inx=&sec_pg_inx , sec_pg_val=&sec_pg_val"
 )
 else if v.value(&first_pg_val&0x3)==0x3
 (
@@ -31,7 +38,11 @@ else if v.value(&first_pg_val&0x3)==0x3
 	&sec_pg_inx=v.value(((&virtual_addr>>10.)&0x3ff)*4)
 	&sec_pg_val=data.long(D:&sec_pgd+&sec_pg_inx)
 	&phy_add=v.value((&sec_pg_val&0xfffffc00)+(&virtual_addr&0x3ff))
+
 	print &virtual_addr " => " &phy_add
+	print "info:"
+	print "pgd=&pgd , first_pg_inx=&first_pg_inx , first_pg_val=&first_pg_val"
+	print "sec_pgd=&sec_pgd , sec_pg_inx=&sec_pg_inx , sec_pg_val=&sec_pg_val"
 )
 else
 (
