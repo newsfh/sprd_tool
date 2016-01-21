@@ -1,0 +1,61 @@
+        WINCLEAR INFOS  
+        AREA.CREATE INFOS 80. 20000.
+        WinPOS 0,0,,,,, INFOS  
+        AREA.VIEW INFOS  
+        AREA.CLEAR INFOS  
+        AREA.SELECT INFOS  
+
+&save=0
+&is_check_next=0
+
+&i=0
+&free_list_cur=0
+while &i<2.
+(
+	&j=0
+	while &j<11.
+	(
+		&k=0
+		while &k<4
+		(
+			&free_list_head=v.value(&contig_page_data.node_zones[&i].free_area[&j].free_list[&k])
+			if &is_check_next==1
+			(
+				&free_list_cur=v.value(((struct list_head*)&free_list_head)->next)
+			)
+			else
+			(
+				&free_list_cur=v.value(((struct list_head*)&free_list_head)->prev)
+			)
+
+			print "======= zone=&i order=&j core=&k ========"			
+			while &free_list_head!=0&&&free_list_head!=&free_list_cur
+			(
+				&page_ptr=v.value(&free_list_cur-0x14)
+				print &page_ptr
+				
+				if &is_check_next==1
+				(
+					&free_list_cur=v.value(((struct list_head*)&free_list_cur)->next)
+				)
+				else
+				(
+					&free_list_cur=v.value(((struct list_head*)&free_list_cur)->prev)
+				)
+				
+				&save=&save+1.
+				if &save>20000.
+				(
+					print "overflow"
+					enddo
+				)
+			)
+			&k=&k+1.
+		)
+
+		&j=&j+1.
+	)
+
+	&i=&i+1.
+)
+
