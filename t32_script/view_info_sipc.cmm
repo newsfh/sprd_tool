@@ -1,0 +1,14 @@
+;; view SIPC information
+
+;; smsg
+v.v smsg_ipcs
+
+;; sbuf
+v.v sbufs
+
+;; sblock
+v.v sblocks
+
+;; smem
+v.v mem_pool
+
