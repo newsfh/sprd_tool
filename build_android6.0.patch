@@ -1,0 +1,31 @@
+diff --git a/core/main.mk b/core/main.mk
+index ab71be6..e6bb22a 100644
+--- a/core/main.mk
++++ b/core/main.mk
+@@ -496,8 +496,14 @@ ifneq ($(dont_bother),true)
+ 
+ # Can't use first-makefiles-under here because
+ # --mindepth=2 makes the prunes not work.
++only_android_mk_module := bootimage chipram bootloader recoveryimage
++ifneq ($(filter $(only_android_mk_module), $(MAKECMDGOALS)),)
++subdir_makefiles := \
++	$(shell build/tools/findleaves.py $(FIND_LEAVES_EXCLUDES) $(subdirs)/build Android.mk)
++else
+ subdir_makefiles := \
+ 	$(shell build/tools/findleaves.py $(FIND_LEAVES_EXCLUDES) $(subdirs) Android.mk)
++endif
+ 
+ $(foreach mk, $(subdir_makefiles), $(info including $(mk) ...)$(eval include $(mk)))
+ 
+diff --git a/envsetup.sh b/envsetup.sh
+index f094031..e8c1424 100644
+--- a/envsetup.sh
++++ b/envsetup.sh
+@@ -236,6 +236,7 @@ function printconfig()
+ function set_stuff_for_environment()
+ {
+     settitle
++	export JAVA_HOME=""
+     set_java_home
+     setpaths
+     set_sequence_number

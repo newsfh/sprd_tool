@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ##########################################################################
 # author: hua.fang
@@ -15,8 +15,15 @@ fi
 repo sync -d -c -q -j16
 
 if [ -d "./build" ]; then
+	patch_name='~/bin/build_android5.0.patch'
+	read LINE < ./version.txt
+
+	if [[ $LINE =~ "sprdroid6" ]]; then
+		patch_name='~/bin/build_android6.0.patch'
+	fi
+
 	cd ./build
-	git apply ~/build.patch
+	git apply $patch_name
 	cd ..
 fi
 

@@ -13,7 +13,6 @@
 *.su
 *~
 *.swp
-*.patch
 *.bin
 *.cfgtmp
 *.dts.tmp

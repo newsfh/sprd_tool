@@ -22,8 +22,9 @@ if [ "$3" ]; then
 fi
 
 if [ ! -e $delta_path ]; then
-	echo "output folder <$delta_path> not exist"
-	exit
+	mkdir --parents $delta_path
+#	echo "output folder <$delta_path> not exist"
+#	exit
 fi
 
 bfilelist=$(git diff $commita..$commitb --name-status | grep "^[D|M]" | cut -c2- | sort)
