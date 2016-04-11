@@ -1,0 +1,40 @@
+        WINCLEAR INFOS  
+        AREA.CREATE INFOS 80. 2000.
+        WinPOS 0,0,,,,, INFOS  
+        AREA.VIEW INFOS  
+        AREA.CLEAR INFOS  
+        AREA.SELECT INFOS  
+
+
+
+
+print "0x402e0000 : 0x"  data.long(eahb:0x402e0000)  "  : AON_APB_EB0"
+print "0x402e0004 : 0x"  data.long(eahb:0x402e0004)  "  : AON_APB_EB1"
+print "0x71300000 : 0x"  data.long(eahb:0x71300000)  "  : APB_EB"
+print "0x20e00000 : 0x"  data.long(eahb:0x20e00000)  "  : AHB_EB"
+print "0x402b00b4 : 0x"  data.long(eahb:0x402b00b4)  "  : CP_SLP_STATUS_DBG0"
+print "0x402b00bc : 0x"  data.long(eahb:0x402b00bc)  "  : PWR_STATUS0_DBG"
+print "0x402b00c0 : 0x"  data.long(eahb:0x402b00c0)  "  : PWR_STATUS1_DBG"
+print "0x402b00c4 : 0x"  data.long(eahb:0x402b00c4)  "  : PWR_STATUS2_DBG"
+print "0x402b00cc : 0x"  data.long(eahb:0x402b00cc)  "  : SLEEP_CTRL"
+print "0x402b00d4 : 0x"  data.long(eahb:0x402b00d4)  "  : SLEEP_STATUS"
+print "0x402b0080 : 0x"  data.long(eahb:0x402b0080)  "  : XTL0_REL_CFG"
+print "0x402b0084 : 0x"  data.long(eahb:0x402b0084)  "  : XTL1_REL_CFG"
+print "0x402b008c : 0x"  data.long(eahb:0x402b008c)  "  : XTLBUF0_REL_CFG"
+print "0x402b0090 : 0x"  data.long(eahb:0x402b0090)  "  : XTLBUF1_REL_CFG"
+print "0x402b0094 : 0x"  data.long(eahb:0x402b0094)  "  : MPLL_REL_CFG"
+print "0x402b0098 : 0x"  data.long(eahb:0x402b0098)  "  : DPLL_REL_CFG"
+print "0x402b009c : 0x"  data.long(eahb:0x402b009c)  "  : LTEPLL_REL_CFG"
+print "0x402b00a0 : 0x"  data.long(eahb:0x402b00a0)  "  : TWPLL_REL_CFG"
+
+print "0x71400000 : 0x"  data.long(eahb:0x71400000)  "  : INTC0"
+print "0x71500000 : 0x"  data.long(eahb:0x71500000)  "  : INTC1"
+print "0x71600000 : 0x"  data.long(eahb:0x71600000)  "  : INTC2"
+print "0x71700000 : 0x"  data.long(eahb:0x71700000)  "  : INTC3"
+
+print "0x80030084 : 0x"  data.long(edap:0x80030084)  "  : core0 PC"
+print "0x80032084 : 0x"  data.long(edap:0x80032084)  "  : core1 PC"
+print "0x80034084 : 0x"  data.long(edap:0x80034084)  "  : core2 PC"
+print "0x80036084 : 0x"  data.long(edap:0x80036084)  "  : core3 PC"
+
+print "0x300003fc : 0x"  data.long(eahb:0x300003fc)  "  : DDR port"
