@@ -791,52 +791,72 @@ fi
 if (($READ_DDR_FREQ & $FUNC_ENABLE)); then
 echo "===============================  DDR freq  ================================="
 
+# function read_DDR_freq() {
+# 	REG_AON_CLK_EMC_CFG=$($LOOKAT 0x402d0058|$TR -d '\r')
+# 	REG_AON_APB_DPLL_CFG1=$($LOOKAT 0x402e004c|$TR -d '\r')
+# 	REG_AON_APB_DPLL_CFG2=$($LOOKAT 0x402e0050|$TR -d '\r')
+# 
+# 	clk_emc_sel=$(($REG_AON_CLK_EMC_CFG & 7))
+# 	clk_emc_div=$(($REG_AON_CLK_EMC_CFG >> 8 & 0x7))
+# 	dpll_refin=$((($REG_AON_APB_DPLL_CFG1 >> 18) & 0x3))
+# 	dpll_nint=$((($REG_AON_APB_DPLL_CFG2 >> 24) & 0x3f))
+# 	dpll_kint=$(($REG_AON_APB_DPLL_CFG2 & 0xfffff))
+# 
+# 	ddr_freq=0
+# 	ddr_pll="TWPLL"
+# 
+# 	if ((clk_emc_sel<7)); then
+# 		case $clk_emc_sel in
+# 			0) clk_src=26 ;;
+# 			1) clk_src=192 ;;
+# 			2) clk_src=307 ;;
+# 			3) clk_src=384 ;;
+# 			4) clk_src=512 ;;
+# 			5) clk_src=614 ;;
+# 			6) clk_src=768 ;;
+# 			*) clk_src=0 ;;
+# 		esac
+# 	else
+# 		case $dpll_refin in
+# 			0) refin=2 ;;
+# 			1) refin=4 ;;
+# 			2) refin=13 ;;
+# 			3) refin=26 ;;
+# 			*) refin=0 ;;
+# 		esac
+# 
+# 		clk_src=$(($refin*$dpll_nint+$refin*$dpll_kint/1024/1024))
+# 		ddr_pll="DPLL"
+# 	fi
+# 
+# 	ddr_freq=$(($clk_src/(1+$clk_emc_div)/2))
+# 
+# 	echo "REG_AON_CLK_EMC_CFG: $REG_AON_CLK_EMC_CFG"
+# 	echo "REG_AON_APB_DPLL_CFG1: $REG_AON_APB_DPLL_CFG1"
+# 	echo "REG_AON_APB_DPLL_CFG2: $REG_AON_APB_DPLL_CFG2"
+# 	echo "----"
+# 	echo "freq: $ddr_freq"
+# 	echo "PLL: $ddr_pll"
+# }
+
 function read_DDR_freq() {
-	REG_AON_CLK_EMC_CFG=$($LOOKAT 0x402d0058|$TR -d '\r')
-	REG_AON_APB_DPLL_CFG1=$($LOOKAT 0x402e004c|$TR -d '\r')
-	REG_AON_APB_DPLL_CFG2=$($LOOKAT 0x402e0050|$TR -d '\r')
-
-	clk_emc_sel=$(($REG_AON_CLK_EMC_CFG & 7))
-	clk_emc_div=$(($REG_AON_CLK_EMC_CFG >> 8 & 0x7))
-	dpll_refin=$((($REG_AON_APB_DPLL_CFG1 >> 18) & 0x3))
-	dpll_nint=$((($REG_AON_APB_DPLL_CFG2 >> 24) & 0x3f))
-	dpll_kint=$(($REG_AON_APB_DPLL_CFG2 & 0xfffff))
-
+	DDR_CFG_REG=$($LOOKAT 0x30000100|$TR -d '\r')
 	ddr_freq=0
-	ddr_pll="TWPLL"
 
-	if ((clk_emc_sel<7)); then
-		case $clk_emc_sel in
-			0) clk_src=26 ;;
-			1) clk_src=192 ;;
-			2) clk_src=307 ;;
-			3) clk_src=384 ;;
-			4) clk_src=512 ;;
-			5) clk_src=614 ;;
-			6) clk_src=768 ;;
-			*) clk_src=0 ;;
-		esac
-	else
-		case $dpll_refin in
-			0) refin=2 ;;
-			1) refin=4 ;;
-			2) refin=13 ;;
-			3) refin=26 ;;
-			*) refin=0 ;;
-		esac
+	case $DDR_CFG_REG in
+		0x0e0a0d09) ddr_freq=192 ;;
+		0x0f141a11) ddr_freq=384 ;;
+		0x0f141b12) ddr_freq=400 ;;
+		0x12192216) ddr_freq=500 ;;
+		0x141b2418) ddr_freq=533 ;;
+		0x141e291b) ddr_freq=600 ;;
+		0x16202b1d) ddr_freq=640 ;;
+		0x17222d1e) ddr_freq=667 ;;
+		*) ddr_freq=0 ;;
+	esac
 
-		clk_src=$(($refin*$dpll_nint+$refin*$dpll_kint/1024/1024))
-		ddr_pll="DPLL"
-	fi
-
-	ddr_freq=$(($clk_src/(1+$clk_emc_div)/2))
-
-	echo "REG_AON_CLK_EMC_CFG: $REG_AON_CLK_EMC_CFG"
-	echo "REG_AON_APB_DPLL_CFG1: $REG_AON_APB_DPLL_CFG1"
-	echo "REG_AON_APB_DPLL_CFG2: $REG_AON_APB_DPLL_CFG2"
-	echo "----"
+	echo "0x30000100 : $DDR_CFG_REG"
 	echo "freq: $ddr_freq"
-	echo "PLL: $ddr_pll"
 }
 
 read_DDR_freq
