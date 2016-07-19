@@ -1,0 +1,76 @@
+        WINCLEAR INFOS  
+        AREA.CREATE INFOS 80. 200.
+        WinPOS 0,0,,,,, INFOS  
+        AREA.VIEW INFOS  
+        AREA.CLEAR INFOS  
+        AREA.SELECT INFOS  
+
+
+
+;;;;;;;;;;;;;   load binary
+	dialog.file "*.dat"
+	ENTRY &smem_file
+
+	&dump_path=os.file.path(&smem_file)
+	cd &dump_path
+	dialog.file "*.dat"
+	ENTRY &smsg_file
+
+	d.load.binary &smem_file 0x87800000 /noclear
+	d.load.binary &smsg_file 0x8AA40000 /noclear
+
+
+
+;;;;;;;;;;   print smsg information
+print "--------  smsg info:"
+print "  tx_addr: 0x8aa40000 , r_ptr: 0x" data.long(D:0x8aa40800) ", w_prt: 0x" data.long(D:0x8aa40804)
+print "  rx_addr: 0x8aa40400 , r_ptr: 0x" data.long(D:0x8aa40808) ", w_prt: 0x" data.long(D:0x8aa4080c)
+d.dump 0x8AA40000
+
+
+
+;;;;;;;;;;   print sbuf information
+print " "
+print " "
+print "--------  sbuf info:"
+
+&count=0
+&sbuf_addr=0x87800000
+
+while &count<4
+(
+	&sbuf_count=data.long(D:&sbuf_addr)
+	&tx_len=data.long(D:(&sbuf_addr+0x8))
+	&rx_len=data.long(D:(&sbuf_addr+0x18))
+
+	d.dump &sbuf_addr
+	print "sbuf" &count ":"
+	print "  addr: 0x" &sbuf_addr ", count: 0x" &sbuf_count ", tx_len: 0x" &tx_len ", rx_len: 0x" &rx_len
+	&i=0.
+	while &i<&sbuf_count
+	(
+		&tx_r_ptr=data.long(D:(&sbuf_addr+0xc+0x20*&i))
+		&tx_w_ptr=data.long(D:(&sbuf_addr+0x10+0x20*&i))
+		&rx_r_ptr=data.long(D:(&sbuf_addr+0x1c+0x20*&i))
+		&rx_w_ptr=data.long(D:(&sbuf_addr+0x20+0x20*&i))
+		if &tx_r_ptr!=0||&tx_w_ptr!=0||&rx_r_ptr!=0||&rx_w_ptr!=0
+		(
+			print "   " &i " : tx_r=0x" &tx_r_ptr ", tx_w=0x" &tx_w_ptr ", rx_r=0x" &rx_r_ptr ", rx_w=0x" &rx_w_ptr
+		)
+		
+		&i=&i+1
+	)
+	print " "
+
+	&size=&sbuf_count*(&tx_len+&rx_len+0x20)+0x4
+	if &size%0x1000==0
+	(
+		&sbuf_addr=&sbuf_addr+&size
+	)
+	else
+	(
+		&sbuf_addr=&sbuf_addr+(&size/0x1000+1)*0x1000
+	)
+
+	&count=&count+1
+)
